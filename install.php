@@ -1,8 +1,9 @@
 <?php
+require_once 'lib/common.php';
 // Get the PDO DSN string
-$root = realpath(__DIR__);
-$database = $root . '/data/data.sqlite';
-$dsn = 'sqlite:' . $database;
+$root = getRootPath();
+$database = getDatabasePath();
+
 $error = '';
 // A security measure, to avoid anyone resetting the database if it already exists
 if (is_readable($database) && filesize($database) > 0)
@@ -33,7 +34,7 @@ if (!$error)
 // Connect to the new database and try to run the SQL commands
 if (!$error)
 {
-    $pdo = new PDO($dsn);
+    $pdo = getPDO();
     $result = $pdo->exec($sql);
     if ($result === false)
     {
@@ -53,7 +54,7 @@ if (!$error)
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Blog installer</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />

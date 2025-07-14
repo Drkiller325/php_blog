@@ -51,6 +51,25 @@ function htmlEscape($html)
     return htmlspecialchars($html, ENT_HTML5, 'UTF-8');
 }
 
+function convertSqlDate($sqlDate)
+{
+    /* @var $date DateTime */
+    $date = DateTime::createFromFormat('Y-m-d H:i:s', $sqlDate);
+    return $date->format('d M Y, H:i');
+}
+
+function redirectAndExit($script)
+{
+    // Get the domain-relative URL (e.g. /blog/whatever.php or /whatever.php) and work
+    // out the folder (e.g. /blog/ or /).
+    $relativeUrl = $_SERVER['PHP_SELF'];
+    $urlFolder = substr($relativeUrl, 0, strrpos($relativeUrl, '/') + 1);
+    // Redirect to the full URL (http://myhost/blog/script.php)
+    $host = $_SERVER['HTTP_HOST'];
+    $fullUrl = 'http://' . $host . $urlFolder . $script;
+    header('Location: ' . $fullUrl);
+    exit();
+}
 /**
  * Returns the number of comments for the specified post
  *

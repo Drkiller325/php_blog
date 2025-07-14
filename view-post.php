@@ -34,6 +34,10 @@ if ($result === false)
 }
 // Let's get a row
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Swap carriage returns for paragraph breaks
+$bodyText = htmlEscape($row['body']);
+$paraText = str_replace("\n", '</p><p>', $bodyText);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +58,23 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <?php echo $row['created_at'] ?>
         </div>
         <p>
-            <?php echo htmlEscape($row['body']) ?>
+            <?php // This is already escaped, so doesn't need further escaping ?>
+            <?php echo $paraText ?>) ?>
         </p>
+
+        <h3><?php echo countCommentsForPost($post_id) ?></h3>
+        <?php foreach (getCommentsForPost($post_id) as $comment): ?>
+            <div class="comment">
+                <div class="comment-meta">
+                    Comment By
+                    <?php echo htmlEscape($comment['name']) ?>
+                    on
+                    <?php echo  $comment['created_at'] ?>
+                </div>
+                <div class="comment-body">
+                    <?php echo htmlEscape($comment['text']) ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </body>
 </html>

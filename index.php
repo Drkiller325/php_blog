@@ -32,9 +32,10 @@ if ($stmt === false) {
             </h2>
             <div>
                 <?php echo $row['created_at'] ?>
+                <?php echo countCommentsForPost($row['id']); ?>
             </div>
             <p>
-               <?php echo htmlEscape($row['body']); ?>
+               <?php echo htmlEscape($row['body']) ?>
             <p>
                 <a
                         href="view-post.php?post_id=<?php echo $row['id']; ?>"

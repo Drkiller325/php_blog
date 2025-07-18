@@ -21,9 +21,31 @@ if (!$row)
     redirectAndExit('index.php?not-found=1');
 }
 
-// Swap carriage returns for paragraph breaks
-$bodyText = htmlEscape($row['body']);
-$paraText = str_replace("\n", '</p><p>', $bodyText);
+$errors = null;
+if ($_POST)
+{
+    $commentData = array(
+            'name' => $_POST['comment-name'],
+        'website' => $_POST['comment-website'],
+        'text' => $_POST['comment-text'],
+    );
+    $errors = addCommentToPost($pdo, $post_id, $commentData);
+
+    // If there are no errors, redirect to the same page to show the new comment
+    if (!$errors)
+    {
+        redirectAndExit('view-post.php?post_id=' . $post_id);
+    }
+}
+else
+{
+    $commentData = array(
+        'name' => '',
+        'website' => '',
+        'text' => '',
+    );
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,7 +67,7 @@ $paraText = str_replace("\n", '</p><p>', $bodyText);
         </div>
         <p>
             <?php // This is already escaped, so doesn't need further escaping ?>
-            <?php echo $paraText ?>) ?>
+            <?php echo convertNewlinesToParagraphs($row['body']) ?>
         </p>
 
         <h3><?php echo countCommentsForPost($post_id) ?></h3>
@@ -58,9 +80,12 @@ $paraText = str_replace("\n", '</p><p>', $bodyText);
                     <?php echo  $comment['created_at'] ?>
                 </div>
                 <div class="comment-body">
-                    <?php echo htmlEscape($comment['text']) ?>
+                    <?php // This is already escaped ?>
+                    <?php echo convertNewlinesToParagraphs($comment['text']) ?>
                 </div>
             </div>
         <?php endforeach; ?>
+
+        <?php require 'templates/comment-form.php' ?>
     </body>
 </html>

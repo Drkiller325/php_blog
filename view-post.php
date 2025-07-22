@@ -74,8 +74,8 @@ else
         </div>
 
 
-        <h3><?php echo countCommentsForPost($post_id) ?></h3>
-        <?php foreach (getCommentsForPost($post_id) as $comment): ?>
+        <h3><?php echo countCommentsForPost($pdo, $post_id) ?> comments</h3>
+        <?php foreach (getCommentsForPost($pdo, $post_id) as $comment): ?>
             <div class="comment">
                 <div class="comment-meta">
                     Comment By

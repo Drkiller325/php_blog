@@ -42,7 +42,7 @@ $notFound = isset($_GET['not-found']);
                 </h2>
                 <div class="meta">
                     <?php echo $row['created_at'] ?>
-                    <?php echo countCommentsForPost($row['id']); ?>
+                    <?php echo countCommentsForPost($pdo, $row['id']); ?>
                 </div>
                 <p>
                    <?php echo htmlEscape($row['body']) ?>

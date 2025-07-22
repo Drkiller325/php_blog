@@ -56,21 +56,23 @@ else
         A blog application |
         <?php echo htmlEscape($row['title']) ?>
     </title>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <?php require_once 'templates/head.php'; ?>
     </head>
     <body>
         <?php require 'templates/title.php' ?>
 
+        <div class="post">
         <h2>
             <?php echo htmlEscape($row['title']) ?>
         </h2>
-        <div>
+        <div class="date">
             <?php echo $row['created_at'] ?>
         </div>
-        <p>
+
             <?php // This is already escaped, so doesn't need further escaping ?>
             <?php echo convertNewlinesToParagraphs($row['body']) ?>
-        </p>
+        </div>
+
 
         <h3><?php echo countCommentsForPost($post_id) ?></h3>
         <?php foreach (getCommentsForPost($post_id) as $comment): ?>

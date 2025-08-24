@@ -37,7 +37,7 @@ function editPost(PDO $pdo, $title, $body, $postId)
             post
         SET
             title = :title,
-            body = :body,
+            body = :body
         WHERE
             id = :post_id
             ";

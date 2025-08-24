@@ -16,6 +16,7 @@ else
 // Connect to the database, run a query, handle errors
 $pdo = getPDO();
 $row = getPostRow($pdo, $post_id);
+$commentCount = $row['comment_count'];
 
 // If the post does not exist, let's deal with that here
 if (!$row)
@@ -26,18 +27,22 @@ if (!$row)
 $errors = null;
 if ($_POST)
 {
-    $commentData = array(
-            'name' => $_POST['comment-name'],
-        'website' => $_POST['comment-website'],
-        'text' => $_POST['comment-text'],
-    );
-    $errors = addCommentToPost($pdo, $post_id, $commentData);
-
-    // If there are no errors, redirect to the same page to show the new comment
-    if (!$errors)
+    switch ($_GET['action'])
     {
-        redirectAndExit('view-post.php?post_id=' . $post_id);
+        case 'add-comment':
+            $commentData = array(
+                'name' => $_POST['comment-name'],
+                'website' => $_POST['comment-website'],
+                'text' => $_POST['comment-text'],
+            );
+            $errors = handleAddComment($pdo, $post_id, $commentData);
+            break;
+        case 'delete-comment':
+            $deleteResponse = $_POST["delete-comment"];
+            handleDeleteComment($pdo, $post_id, $deleteResponse);
+            break;
     }
+
 }
 else
 {
@@ -74,22 +79,9 @@ else
         </div>
 
 
-        <h3><?php echo countCommentsForPost($pdo, $post_id) ?> comments</h3>
-        <?php foreach (getCommentsForPost($pdo, $post_id) as $comment): ?>
-            <div class="comment">
-                <div class="comment-meta">
-                    Comment By
-                    <?php echo htmlEscape($comment['name']) ?>
-                    on
-                    <?php echo  $comment['created_at'] ?>
-                </div>
-                <div class="comment-body">
-                    <?php // This is already escaped ?>
-                    <?php echo convertNewlinesToParagraphs($comment['text']) ?>
-                </div>
-            </div>
-        <?php endforeach; ?>
+        <?php require "templates/list-comments.php" ?>
 
+        <?php // We use $commentData in this HTML fragment ?>
         <?php require 'templates/comment-form.php' ?>
     </body>
 </html>

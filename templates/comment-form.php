@@ -16,7 +16,11 @@
     </div>
 <?php endif ?>
 <h3>Add your comment</h3>
-<form method="post" class="user-form comment-form">
+<form
+    action="view-post.php?action=add-comment&amp;post_id=<?php echo $post_id?>"
+    method="post"
+    class="comment-form user-form"
+>
     <div>
         <label for="comment-name">
             Name:

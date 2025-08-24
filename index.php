@@ -5,18 +5,9 @@ session_start();
 
 // Connect to the database, run a query, handle errors
 $pdo = getPDO();
-$stmt = $pdo->query(
-        'SELECT 
-            id, title, created_at, body
-        FROM 
-            post
-        ORDER BY 
-            created_at DESC'
-        );
-if ($stmt === false) {
-    throw new exception('Error in SQL query');
-}
+$posts = getAllPosts($pdo);
 $notFound = isset($_GET['not-found']);
+
 ?>
 
 <!DOCTYPE html>
@@ -35,25 +26,31 @@ $notFound = isset($_GET['not-found']);
         <?php endif ?>
 
         <div class="post-list">
-            <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+            <?php foreach ($posts as $post): ?>
                 <div class="post-synopsis">
                 <h2>
-                    <?php echo htmlEscape($row['title']);  ?>
+                    <?php echo htmlEscape($post['title']);  ?>
                 </h2>
                 <div class="meta">
-                    <?php echo $row['created_at'] ?>
-                    <?php echo countCommentsForPost($pdo, $row['id']); ?>
+                    <?php echo $post['created_at'] ?>
+                    <?php echo $post['comment_count'] ?>
                 </div>
                 <p>
-                   <?php echo htmlEscape($row['body']) ?>
+                   <?php echo htmlEscape($post['body']) ?>
                 <p>
-                        <div class="read-more">
+                        <div class="post-controls">
                     <a
-                            href="view-post.php?post_id=<?php echo $row['id']; ?>"
+                            href="view-post.php?post_id=<?php echo $post['id']; ?>"
                     >Read more...</a>
+                        <?php if (isLoggedIn()): ?>
+                        |
+                        <a
+                            href="edit-post.php?post_id=<?php echo $post['id'] ?>"
+                            >Edit post</a>
+                        <?php endif ?>
                         </div>
                 </div>
-            <?php endwhile; ?>
+            <?php endforeach ?>
         </div>
 
     </body>

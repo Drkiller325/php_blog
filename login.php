@@ -7,6 +7,13 @@ if (version_compare(PHP_VERSION, '5.3.0') < 0)
 }
 
 session_start();
+
+// redirect if logged in
+if (isLoggedIn())
+{
+    redirectAndExit('index.php');
+}
+
 // Handle the form posting
 $username = '';
 if ($_POST)
@@ -44,19 +51,28 @@ if ($_POST)
     <p>Login here:</p>
         <form
             method="post"
+            class="user-form"
         >
-            <p>
-                Username:
+            <div>
+                <label for="username">
+                    Username:
+                </label>
                 <input
                         type="text"
+                        id="username"
                         name="username"
                         value="<?php echo htmlspecialchars($username); ?>"
                 />
-            </p>
-            <p>
-                Password:
-                <input type="password" name="password" />
-            </p>
+            </div>
+            <div>
+                <label for="password">
+                    Password:
+                </label>
+                <input
+                        type="password"
+                        id="password"
+                        name="password" />
+            </div>
             <input type="submit" name="submit" value="Login" />
         </form>
     </body>

@@ -35,6 +35,9 @@
 .menu-options {
     float: right;
 }
+.logo {
+    float:left;
+}
 
 h1, h2, h3 {
     margin-top: 0;
@@ -70,6 +73,10 @@ body {
     padding-top: 8px;
 }
 
+.comment .comment-meta input {
+    float: right;
+}
+
 .comment-body p {
     margin: 8px 4px;
 }
@@ -77,6 +84,7 @@ body {
 .comment-list {
     border-bottom: 1px dotted silver;
     margin-bottom: 12px;
+    max-width: 900px;
 }
 
 .comment-margin {
@@ -97,3 +105,16 @@ body {
         Let's reset each to the left-hand side to be sure. */
     clear: left;
 }
+
+#post-list {
+    border-collapse: collapse;
+    border: 1px solid silver;
+}
+#post-list td, #post-list th{
+    padding: 8px;
+    text-align: left;
+}
+#post-list tbody tr:nth-child(odd) {
+    background-color: #f4f4f4;
+}
+
